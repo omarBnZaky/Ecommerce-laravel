@@ -75,6 +75,15 @@
 <!-- end img -->
 
 
+
+<!-- amount -->
+<div class="form-group {{ $errors->has('amount') ? 'has-error' : ''}}">
+    <label for="amount" class="control-label">{{ 'amount' }}</label>
+    <input class="form-control" name="amount" type="text" id="amount" value="{{ isset($product->amount) ? $product->amount : ''}}" >
+    {!! $errors->first('amount', '<p class="help-block">:message</p>') !!}
+</div>
+<!-- end amount -->
+
 <div class="form-group">
     <input class="btn btn-primary" type="submit" value="{{ $formMode === 'edit' ? 'Update' : 'Create' }}">
 </div>

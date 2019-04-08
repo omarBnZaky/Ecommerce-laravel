@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
@@ -59,10 +61,16 @@ class PublicController extends Controller
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
 
-    public function  payment_page($id){
+    public function  payment_page(Request $request,$id){
        // return $id;
        $product = Product::findOrFail($id);
-        return view('public.paymnet', compact('product'));
+
+       $this->validate($request, [
+        'amount'=> 'required|max:'.$product->amount.'|numeric',
+        ]);
+        $amount = $request->input('amount');
+        $total =  $product->price *  $amount;
+       return view('public.paymnet', compact('product','amount','total'));
 
     }
 

@@ -3,7 +3,12 @@
 <div class="col-lg-9">
 
 <form action="/api/payment/{{$product->id}}" method="post" id="payment-form">
-         
+         <input type="hidden" name="amount" value="{{$amount}}"/>
+         <input type="hidden" name="total" value="{{$total}}"/>
+         <input type="hidden" name="product_id" value="{{$product->id}}"/>
+         <input type="hidden" name="user_id" value="{{auth()->user()->id}}"/>
+
+
          <div id="card-element">
            <!-- A Stripe Element will be inserted here. -->
          </div>

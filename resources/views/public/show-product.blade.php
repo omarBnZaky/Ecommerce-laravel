@@ -11,15 +11,34 @@
         <h5 class="card-title">Product name:{{ $product->title }} </h5>
         <p class="card-text">Price:${{ $product->price }}</p>
         <p class="card-text">Description:{!!  $product->desc !!}.</p>
-        <p class="card-text"><small class="text-muted">  {{ $product->created_at->diffForHumans() }}</small></p>
-    <!-- STRIPE FORM -->
-  <a href="/payment/{{$product->id}}">      
-          <div class="btn btn-success">
-                  Buy {{ $product->title }}
-            </div>
-         </a>
-    <!-- END STRIPE -->
+        <p class="card-text">amount:{{  $product->amount }}</p>
 
+        <p class="card-text"><small class="text-muted">  {{ $product->created_at->diffForHumans() }}</small></p>
+        @guest
+                  <div class="alert alert-primary" role="alert">
+                  You must be logged in to buy this!
+                </div>
+        @else
+           
+                    @if ($errors->any())
+                            <ul class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+
+           <!-- STRIPE FORM -->
+           <form action="/buy/{{$product->id}}" method="post">
+            @csrf
+           <input type="number" name="amount" min="1" max="{{ $product->amount }}" />
+
+                  <button class="btn btn-success">
+                          Buy {{ $product->title }}
+                    </button>
+              </form>
+            <!-- END STRIPE -->
+        @endguest
       </div>
     </div>
   </div>

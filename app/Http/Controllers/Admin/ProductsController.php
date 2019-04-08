@@ -31,22 +31,23 @@ class ProductsController extends Controller
      */
     public function index(Request $request)
     {
-        $keyword = $request->get('search');
-        $perPage = 25;
+        if(auth()->user()->id="1"){
+            $keyword = $request->get('search');
+            $perPage = 25;
 
-        if (!empty($keyword)) {
-            $products = Product::where('title', 'LIKE', "%$keyword%")
-                ->orWhere('desc', 'LIKE', "%$keyword%")
-                ->orWhere('price', 'LIKE', "%$keyword%")
-                ->orWhere('subcategory_id', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $products = Product::latest()->paginate($perPage);
+            if (!empty($keyword)) {
+                $products = Product::where('title', 'LIKE', "%$keyword%")
+                    ->orWhere('desc', 'LIKE', "%$keyword%")
+                    ->orWhere('price', 'LIKE', "%$keyword%")
+                    ->orWhere('subcategory_id', 'LIKE', "%$keyword%")
+                    ->latest()->paginate($perPage);
+            } else {
+                $products = Product::latest()->paginate($perPage);
+            }
+
+            return view('admin.products.index', compact('products'));
         }
-
-        return view('admin.products.index', compact('products'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -80,6 +81,8 @@ class ProductsController extends Controller
             'title' => 'required|max:10',
             'desc' => 'required|max:255',
             'price'=> 'required|numeric',
+            'amount'=> 'required|numeric',
+
             'subcategory_id'=> 'required|not_in:0',
             'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
 
@@ -89,8 +92,9 @@ class ProductsController extends Controller
         $product->title =$request->input('title');
         $product->desc = $request->input('desc');
         $product->price = $request->input('price');
+        $product->amount  = $request->input('amount');
+
         $product->subcategory_id = $request->input('subcategory_id');
-        
         //saving file steps:-
             $file = $request->file('img'); //defining the input
             $productImg = time().'_'.$file->getClientOriginalExtension(); //create the name for the image
@@ -148,6 +152,8 @@ class ProductsController extends Controller
             'title' => 'required|max:10',
             'desc' => 'required|max:255',
             'price'=> 'required|numeric',
+            'amount'=> 'required|numeric',
+
         ]);
            if($request->hasfile('filename'))
                 {
@@ -165,6 +171,7 @@ class ProductsController extends Controller
         $product->title =$request->input('title');
         $product->desc = $request->input('desc');
         $product->price = $request->input('price');
+        $product->amount  = $request->input('amount');
 
         if($request->input('subcategory_id')){
             $product->subcategory_id = $request->input('subcategory_id');

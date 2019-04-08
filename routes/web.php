@@ -27,5 +27,5 @@ Route::get('/ajax-subcat','Admin\\ProductsController@subcategories');
 
 Route::get('/', 'PublicController@index')->name('public');
 Route::get('/product/{id}', 'PublicController@show_product')->name('public');
-Route::get('/payment/{id}','PublicController@payment_page');
+Route::post('/buy/{id}','PublicController@payment_page');
 //Route::post('/payment/{id}','PublicController@buyProduct');

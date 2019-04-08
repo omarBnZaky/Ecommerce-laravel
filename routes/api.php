@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\User;
+use App\Payment;
+use App\Product;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });*/
 
 //Route::post('/payment/{id}','PublicController@buyProduct');
-Route::post('/payment/{id}',function(){
+Route::post('/payment/{id}',function(Request $request,$id){
 
 // Set your secret key: remember to change this to your live secret key in production
     // See your keys here: https://dashboard.stripe.com/account/apikeys
@@ -28,11 +32,22 @@ Route::post('/payment/{id}',function(){
     // Get the payment token ID submitted by the form:
     $token = $_POST['stripeToken'];
     $charge = \Stripe\Charge::create([
-        'amount' => 100,
+        'amount' => $request->input('total'),
         'currency' => 'usd',
         'description' => 'Example charge',
         'source' => $token,
     ]);
+
+    $product= Product::findOrFail($id);
+    $product->decrement('amount',$product->amount);
+
+    $payment = new Payment;
+    $payment->product_id = $request->input('product_id');
+    $payment->amount = $request->input('amount');
+    $payment->user_id = $request->input('user_id');
+    $payment->total = $request->input('total');
+    $payment->save();
+    // store in database
 
     dd('success');
 });
