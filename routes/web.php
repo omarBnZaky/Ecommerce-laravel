@@ -11,10 +11,11 @@
 |
 */
 
+/*
 Route::get('/', function () {
     return view('welcome');
 });
-
+*/
 Route::resource('admin/categories', 'Admin\\CategoriesController');
 Route::resource('admin/subcategories', 'Admin\\subcategoriesController');
 Route::resource('admin/products', 'Admin\\ProductsController');
@@ -22,15 +23,9 @@ Auth::routes();
 
 Route::get('/dashbord', 'HomeController@index')->name('admin');
 Route::get('/ajax-subcat','Admin\\ProductsController@subcategories');
-    /*
-Route::get('/ajax-subcat',function (Request $request){
 
-    //  $cat_id = Input::get('cat_id');
-      $cat_id = $request->input('cat_id');
 
-     
-      $subcategories = subcategory::where('category_id', '=' , $cat_id)->get();
-      return Response::json($subcategories);
-
-});
-*/
+Route::get('/', 'PublicController@index')->name('public');
+Route::get('/product/{id}', 'PublicController@show_product')->name('public');
+Route::get('/payment/{id}','PublicController@payment_page');
+//Route::post('/payment/{id}','PublicController@buyProduct');
