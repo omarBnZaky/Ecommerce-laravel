@@ -6,6 +6,10 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Product;
+use App\Category;
+use App\subcategory;
+use App\ad;
+
 use Illuminate\Http\Request;
 
 class PublicController extends Controller
@@ -28,7 +32,10 @@ class PublicController extends Controller
             $products = Product::latest()->paginate($perPage);
         }
 
-        return view('public.index', compact('products'));
+        $categories = Category::all();
+        $ads = ad::all();
+
+        return view('public.index', compact('products','categories','ads'));
     }
 
     /**
@@ -46,9 +53,9 @@ class PublicController extends Controller
                                  ->get();
 
         $allProducts = Product::all();
-
+        $categories = Category::all();
        // return $allProducts;
-        return view('public.show-product', compact('product','subCatProducts','allProducts'));
+        return view('public.show-product', compact('product','subCatProducts','allProducts','categories'));
     }
 
   
@@ -70,7 +77,9 @@ class PublicController extends Controller
         ]);
         $amount = $request->input('amount');
         $total =  $product->price *  $amount;
-       return view('public.paymnet', compact('product','amount','total'));
+        $categories = Category::all();
+
+       return view('public.paymnet', compact('product','amount','total','categories'));
 
     }
 
@@ -94,6 +103,30 @@ class PublicController extends Controller
 */
 
 
+
+     public function show_cat_products($id){
+
+        $category = Category::findOrFail($id);
+        $categories = Category::all();
+
+        return view('public.category', compact('category','categories'));
+
+     }
+
+
+
+
+     public function show_subCat_products($id){
+
+        $subcategory = subcategory::findOrFail($id);
+
+
+
+        $categories = Category::all();
+
+        return view('public.subcategory', compact('subcategory','categories'));
+
+     }
 
 
     /*

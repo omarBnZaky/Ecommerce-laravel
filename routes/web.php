@@ -19,6 +19,8 @@ Route::get('/', function () {
 Route::resource('admin/categories', 'Admin\\CategoriesController');
 Route::resource('admin/subcategories', 'Admin\\subcategoriesController');
 Route::resource('admin/products', 'Admin\\ProductsController');
+Route::resource('admin/ads', 'Admin\\adsController');
+
 Auth::routes();
 
 Route::get('/dashbord', 'HomeController@index')->name('admin');
@@ -29,3 +31,7 @@ Route::get('/', 'PublicController@index')->name('public');
 Route::get('/product/{id}', 'PublicController@show_product')->name('public');
 Route::post('/buy/{id}','PublicController@payment_page');
 //Route::post('/payment/{id}','PublicController@buyProduct');
+
+Route::get('/category/{id}', 'PublicController@show_cat_products')->name('category.all');
+Route::get('/subcatgory/{id}', 'PublicController@show_subCat_products')->name('category.all');
+

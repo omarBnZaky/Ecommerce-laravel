@@ -28,17 +28,26 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        $keyword = $request->get('search');
-        $perPage = 25;
+        if(auth()->user()->id==1){
 
-        if (!empty($keyword)) {
-            $categories = Category::where('name', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $categories = Category::latest()->paginate($perPage);
-        }
+                    $keyword = $request->get('search');
+                    $perPage = 25;
 
-        return view('admin.categories.index', compact('categories'));
+                    if (!empty($keyword)) {
+                        $categories = Category::where('name', 'LIKE', "%$keyword%")
+                            ->latest()->paginate($perPage);
+                    } else {
+                        $categories = Category::latest()->paginate($perPage);
+                    }
+
+                    
+
+                    return view('admin.categories.index', compact('categories'));
+
+
+            }else{
+                return redirect('/');
+            }
     }
 
     /**
@@ -48,7 +57,15 @@ class CategoriesController extends Controller
      */
     public function create()
     {
+
+        if(auth()->user()->id==1){
+
         return view('admin.categories.create');
+
+
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -79,9 +96,14 @@ class CategoriesController extends Controller
      */
     public function show($id)
     {
+        if(auth()->user()->id==1){
+
         $category = Category::findOrFail($id);
 
         return view('admin.categories.show', compact('category'));
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -93,9 +115,15 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
+        if(auth()->user()->id==1){
+
         $category = Category::findOrFail($id);
 
         return view('admin.categories.edit', compact('category'));
+
+        }else{
+            return redirect('/');
+        }
     }
 
     /**

@@ -22,9 +22,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });*/
 
 //Route::post('/payment/{id}','PublicController@buyProduct');
+
+
 Route::post('/payment/{id}',function(Request $request,$id){
 
-// Set your secret key: remember to change this to your live secret key in production
+    // Set your secret key: remember to change this to your live secret key in production
     // See your keys here: https://dashboard.stripe.com/account/apikeys
     \Stripe\Stripe::setApiKey("sk_test_43FBvaCuBKkL7t3cKFhpOSkq");
 
@@ -39,7 +41,7 @@ Route::post('/payment/{id}',function(Request $request,$id){
     ]);
 
     $product= Product::findOrFail($id);
-    $product->decrement('amount',$product->amount);
+    $product->decrement('amount',$request->input('amount'));
 
     $payment = new Payment;
     $payment->product_id = $request->input('product_id');

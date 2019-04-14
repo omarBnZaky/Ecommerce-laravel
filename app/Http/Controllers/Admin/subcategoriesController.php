@@ -31,18 +31,24 @@ class subcategoriesController extends Controller
      */
     public function index(Request $request)
     {
-        $keyword = $request->get('search');
-        $perPage = 25;
+        if(auth()->user()->id==1){
 
-        if (!empty($keyword)) {
-            $subcategories = subcategory::where('name', 'LIKE', "%$keyword%")
-                ->orWhere('category_id', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $subcategories = subcategory::latest()->paginate($perPage);
+                $keyword = $request->get('search');
+                $perPage = 25;
+
+                if (!empty($keyword)) {
+                    $subcategories = subcategory::where('name', 'LIKE', "%$keyword%")
+                        ->orWhere('category_id', 'LIKE', "%$keyword%")
+                        ->latest()->paginate($perPage);
+                } else {
+                    $subcategories = subcategory::latest()->paginate($perPage);
+                }
+
+                return view('admin.subcategories.index', compact('subcategories'));
+            
+        }else{
+            return redirect('/');
         }
-
-        return view('admin.subcategories.index', compact('subcategories'));
     }
 
     /**
@@ -52,9 +58,14 @@ class subcategoriesController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        if(auth()->user()->id==1){
 
-        return view('admin.subcategories.create',compact('categories'));
+                $categories = Category::all();
+
+                return view('admin.subcategories.create',compact('categories'));
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -87,9 +98,14 @@ class subcategoriesController extends Controller
      */
     public function show($id)
     {
-        $subcategory = subcategory::findOrFail($id);
+        if(auth()->user()->id==1){
 
-        return view('admin.subcategories.show', compact('subcategory'));
+            $subcategory = subcategory::findOrFail($id);
+
+            return view('admin.subcategories.show', compact('subcategory'));
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -101,10 +117,16 @@ class subcategoriesController extends Controller
      */
     public function edit($id)
     {
-        $categories = Category::all();
-        $subcategory = subcategory::findOrFail($id);
+        if(auth()->user()->id==1){
 
-        return view('admin.subcategories.edit', compact('subcategory','categories'));
+            $categories = Category::all();
+            $subcategory = subcategory::findOrFail($id);
+
+            return view('admin.subcategories.edit', compact('subcategory','categories'));
+
+        }else{
+            return redirect('/');
+        }
     }
 
     /**

@@ -31,7 +31,7 @@ class ProductsController extends Controller
      */
     public function index(Request $request)
     {
-        if(auth()->user()->id="1"){
+        if(auth()->user()->id==1){
             $keyword = $request->get('search');
             $perPage = 25;
 
@@ -46,6 +46,8 @@ class ProductsController extends Controller
             }
 
             return view('admin.products.index', compact('products'));
+        }else{
+            return redirect('/');
         }
     }
     /**
@@ -54,9 +56,15 @@ class ProductsController extends Controller
      * @return \Illuminate\View\View
      */
     public function create()
-    {
-        $categories = Category::all();
-        return view('admin.products.create',compact('categories'));
+    {    
+        if(auth()->user()->id==1){
+
+                $categories = Category::all();
+                return view('admin.products.create',compact('categories'));
+            }else{
+                return redirect('/');
+            }
+
     }
 
     public function subcategories(Request $request){
@@ -117,10 +125,16 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
+        if(auth()->user()->id==1){
+
         $product = Product::findOrFail($id);
 
         return view('admin.products.show', compact('product'));
+        }else{
+            return redirect('/');
+        }
     }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -131,10 +145,15 @@ class ProductsController extends Controller
      */
     public function edit($id)
     {
+        if(auth()->user()->id==1){
+
         $product = Product::findOrFail($id);
         $categories = Category::all();
 
         return view('admin.products.edit', compact('categories','product'));
+        }else{
+            return redirect('/');
+        }
     }
 
     /**
@@ -200,6 +219,10 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
+        $product = Product::findOrFail($id);
+        $path = public_path().'/uploads/products/'.$product->img;//the path
+        unlink($path);
+        
         Product::destroy($id);
 
         return redirect('admin/products')->with('flash_message', 'Product deleted!');
