@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('title')->nullable();
             $table->text('desc')->nullable();
             $table->integer('price')->nullable();
-            $table->string('subcategory');
+            $table->string('subcategory_id');
             });
     }
 

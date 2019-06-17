@@ -157,7 +157,15 @@ class subcategoriesController extends Controller
      */
     public function destroy($id)
     {
+        $subcategory = subcategory::findOrFail($id);
+
+        
+        foreach($subcategory->products as $product){
+            $product->delete();
+        }
+
         subcategory::destroy($id);
+
 
         return redirect('admin/subcategories')->with('flash_message', 'subcategory deleted!');
     }

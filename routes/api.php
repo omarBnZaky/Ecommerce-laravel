@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Payment;
 use App\Product;
+use Stripe\Stripe;
+
 
 
 /*

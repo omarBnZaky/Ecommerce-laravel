@@ -157,7 +157,18 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
+        $category = Category::findOrFail($id);
+
+        foreach($category->subcategories as $subcategory){
+
+            foreach($subcategory->products as $product){
+                $product->delete();
+            }
+            $subcategory->delete();
+
+        }
         Category::destroy($id);
+
 
         return redirect('admin/categories')->with('flash_message', 'Category deleted!');
     }
